@@ -7,8 +7,8 @@ def nester():
         X=3
         print(X)
         def method1(self):
-            print(X)
-            print(self.X)
+            print("Inside method1: %d" %X)
+            print("self.X: %d" %self.X)
         def method2(self):
             X=4
             print(X)
