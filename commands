@@ -1,0 +1,400 @@
+Difference in 2 and 3
+in 3, need import first and then reload
+
+
+
+exec(open('script1.py').read())
+
+
+>>> 3.1415 * 2 # repr: as code (Pythons < 2.7 and 3.1)
+6.2830000000000004
+>>> print(3.1415 * 2) # str: user-friendly
+6.283
+The first result isn’t a bug; it’s a display issue. It turns out that there are two ways to
+print every object in Python—with full precision (as in the first result shown here), and
+in a user-friendly form (as in the second). Formally, the first form is known as an object’s
+as-code repr, and the second is its user-friendly str.
+
+
+
+Strictly speaking, you can change text-based data in place if you either expand it into a
+list of individual characters and join it back together with nothing between, or use the
+newer bytearray type available in Pythons 2.6, 3.0, and later:
+>>> S = 'shrubbery'
+>>> L = list(S) # Expand to a list: [...]
+>>> L
+['s', 'h', 'r', 'u', 'b', 'b', 'e', 'r', 'y']
+>>> L[1] = 'c' # Change it in place
+>>> ''.join(L) # Join with empty delimiter
+'scrubbery'
+>>> B = bytearray(b'spam') # A bytes/list hybrid (ahead)
+>>> B.extend(b'eggs') # 'b' needed in 3.X, not 2.X
+>>> B # B[i] = ord(c) works here too
+bytearray(b'spameggs')
+>>> B.decode() # Translate to normal string
+'spameggs'
+
+
+
+To illustrate, the sum built-in sums items in a sequence—in
+this example, summing all items in our matrix’s rows on request:
+>>> G = (sum(row) for row in M) # Create a generator of row sums
+>>> next(G) # iter(G) not required here
+
+
+
+>>> T = (1, 2, 3, 4) # A 4-item tuple
+>>> len(T) # Length
+4
+>> T + (5, 6) # Concatenation
+(1, 2, 3, 4, 5, 6)
+>>> T[0] # Indexing, slicing, and more
+1
+
+>>> T = (1, 2, 3, 4) # A 4-item tuple
+>>> len(T) # Length
+4
+>> T + (5, 6) # Concatenation
+(1, 2, 3, 4, 5, 6)
+>>> T[0] # Indexing, slicing, and more
+
+
+
+
+>>> 1 == 2 < 3 # Same as: 1 == 2 and 2 < 3
+False # Not same as: False < 3 (which means 0 < 3, which is true!)
+
+
+// quotient
+% remainder
+
+>>> 1 == 2 < 3 # Same as: 1 == 2 and 2 < 3
+False # Not same as: False < 3 (which means 0 < 3, which is true!)
+Numbers
+
+
+>>> 1.1 + 2.2 == 3.3 # Shouldn't this be True?...
+False
+>>> 1.1 + 2.2 # Close to 3.3, but not exactly: limited precision
+3.3000000000000003
+>>> int(1.1 + 2.2) == int(3.3) # OK if convert: see also round, floor, trunc ahead
+True # Decimals and fractions (ahead) may help here too
+
+
+
+
+C:\code> C:\Python33\python
+>>>
+>>> 10 / 4 # Differs in 3.X: keeps remainder
+2.5
+>>> 10 / 4.0 # Same in 3.X: keeps remainder
+2.5
+>>> 10 // 4 # Same in 3.X: truncates remainder
+2
+>>> 10 // 4.0 # Same in 3.X: truncates to floor
+2.0
+C:\code> C:\Python27\python
+>>>
+>>> 10 / 4 # This might break on porting to 3.X!
+2
+>>> 10 / 4.0
+2.5
+>>> 10 // 4 # Use this in 2.X if truncation needed
+2
+>>> 10 // 4.0
+2.0
+
+
+
+>>> S
+{1.23}
+>>> S.add([1, 2, 3]) # Only immutable objects work in a set
+TypeError: unhashable type: 'list'
+
+
+>>> S.add({'a':1})
+TypeError: unhashable type: 'dict'
+>>> S.add((1, 2, 3))
+>>> S # No list or dict, but tuple OK
+{1.23, (1, 2, 3)}
+>>> S | {(4, 5, 6), (1, 2, 3)} # Union: same as S.union(...)
+{1.23, (4, 5, 6), (1, 2, 3)}
+>>> (1, 2, 3) in S # Membership: by complete values
+True
+>>> (1, 4, 3) in S
+False
+
+
+Tuples in a set, for instance, might be used to represent dates, records, IP addresses,
+and so on (more on tuples later in this part of the book). Sets may also contain modules,
+type objects, and more. Sets themselves are mutable too, and so cannot be nested in
+other sets directly; if you need to store a set inside another set, the frozenset built-in
+call works just like set but creates an immutable set that cannot change and thus can
+be embedded in other sets.
+
+
+
+For example, because items are stored only once in a set, sets can be used to filter
+duplicates out of other collections, though items may be reordered in the process because
+sets are unordered in general. Simply convert the collection to a set, and then
+convert it back again (sets work in the list call here because they are iterable, another
+technical artifact that we’ll unearth later):
+
+
+
+>>> L1 = [2, 3, 4] # A mutable object
+>>> L2 = L1 # Make a reference to the same object
+>>> L1[0] = 24 # An in-place change
+>>> L1 # L1 is different
+[24, 3, 4]
+>>> L2 # But so is L2!
+[24, 3, 4]
+
+
+>>> L1 = [2, 3, 4]
+>>> L2 = L1[:] # Make a copy of L1 (or list(L1), copy.copy(L1), etc.)
+>>> L1[0] = 24
+>>> L1
+[24, 3, 4]
+>>> L2 # L2 is not changed
+[2, 3, 4]
+
+
+
+import copy
+X = copy.copy(Y) # Make top-level "shallow" copy of any object Y
+X = copy.deepcopy(Y) # Make deep copy of any object Y: copy all nested parts
+
+
+
+>>> L = [1, 2, 3]
+>>> M = L # M and L reference the same object
+>>> L == M # Same values
+True
+>>> L is M # Same objects
+True
+
+
+>>> L = [1, 2, 3]
+>>> M = [1, 2, 3] # M and L reference different objects
+>>> L == M # Same values
+True
+>>> L is M # Different objects
+False
+
+
+>>> X = 42
+>>> Y = 42 # Should be two different objects
+>>> X == Y
+True
+>>> X is Y # Same object anyhow: caching at work!
+True
+
+
+
+Therefore, to fix the filename problem, just remember to add the letter r on
+Windows:
+myfile = open(r'C:\new\text.dat', 'w')
+Alternatively, because two backslashes are really an escape sequence for one backslash,
+you can keep your backslashes by simply doubling them up:
+myfile = open('C:\\new\\text.dat', 'w')
+In fact, Python itself sometimes uses this doubling scheme when it prints strings with
+embedded backslashes:
+>>> path = r'C:\new\text.dat'
+>>> path # Show as Python code
+'C:\\new\\text.dat'
+>>> print(path) # User-friendly format
+C:\new\text.dat
+>>> len(path) # String length
+15
+
+
+
+>>> mantra = """Always look
+... on the bright
+... side of life."""
+>>>
+>>> mantra
+'Always look\n on the bright\nside of life.'
+This string spans three lines.
+
+
+
+Triple-quoted strings are useful anytime you need multiline text in your program; for
+example, to embed multiline error messages or HTML, XML, or JSON code in your
+Python source code files. You can embed such blocks directly in your scripts by triplequoting
+without resorting to external text files or explicit concatenation and newline
+characters.
+Triple-quoted strings are also commonly used for documentation strings, which are
+string literals that are taken as comments when they appear at specific points in your
+file (more on these later in the book). These don’t have to be triple-quoted blocks, but
+they usually are to allow for multiline comments.
+Finally, triple-quoted strings are also sometimes used as a “horribly hackish” way to
+temporarily disable lines of code during development (OK, it’s not really too horrible,
+and it’s actually a fairly common practice today, but it wasn’t the intent). If you wish
+to turn off a few lines of code and run your script again, simply put three quotes above
+and below them, like this:
+X = 1
+"""
+import os # Disable this code temporarily
+print(os.getcwd())
+"""
+Y = 2
+
+
+ord('s')
+chr(115)
+
+L=['abc', 'ABD', 'aBe']
+L.sort(key=str.lower, reverse=True)
+
+
+
+
+append: Appends object at end.
+
+x = [1, 2, 3]
+x.append([4, 5])
+print (x)
+gives you: [1, 2, 3, [4, 5]]
+
+extend: Extends list by appending elements from the iterable.
+
+x = [1, 2, 3]
+x.extend([4, 5])
+print (x)
+gives you: [1, 2, 3, 4, 5]
+
+
+
+>>> D = dict(a=1, b=2, c=3)
+>>> D
+{'b': 2, 'c': 3, 'a': 1}
+>>> K = D.keys() # Makes a view object in 3.X, not a list
+>>> K
+dict_keys(['b', 'c', 'a'])
+>>> list(K) # Force a real list in 3.X if needed
+['b', 'c', 'a']
+>>> V = D.values() # Ditto for values and items views
+>>> V
+dict_values([2, 3, 1])
+>>> list(V)
+[2, 3, 1]
+>>> D.items()
+dict_items([('b', 2), ('c', 3), ('a', 1)])
+>>> list(D.items())
+[('b', 2), ('c', 3), ('a', 1)]
+>>> K[0] # List operations fail unless converted
+TypeError: 'dict_keys' object does not support indexing
+>>> list(K)[0]
+'b'
+
+
+L=[1, 2, 3]
+D={'a': 1, 'b':2}
+A=L[:]
+B=D.copy()
+
+a, *b='spam'
+
+
+
+
+When combined with the loop else clause, the break statement can often eliminate the
+need for the search status flags used in other languages. For instance, the following
+piece of code determines whether a positive integer y is prime by searching for factors
+greater than 1:
+x = y // 2 # For some y > 1
+while x > 1:
+if y % x == 0: # Remainder
+print(y, 'has factor', x)
+break # Skip else
+x -= 1
+else: # Normal exit
+print(y, 'is prime')
+Rather than setting a flag to be tested when the loop is exited, it inserts a break where
+a factor is found. This way, the loop else clause can assume that it will be executed
+only if no factor is found; if you don’t hit the break, the number is prime. Trace through
+this code to see how this works.
+
+
+
+in Chapter 11 at work. Remember, the for loop assigns items in the sequence object
+to the target, and assignment works the same everywhere:
+>>> T = [(1, 2), (3, 4), (5, 6)]
+>>> for (a, b) in T: # Tuple assignment at work
+... print(a, b)
+...
+1 2
+3 4
+5 6
+
+
+
+>>> L1 = [1,2,3,4]
+>>> L2 = [5,6,7,8]
+To combine the items in these lists, we can use zip to create a list of tuple pairs. Like
+range, zip is a list in Python 2.X, but an iterable object in 3.X where we must wrap it
+in a list call to display all its results at once (again, there’s more on iterables coming
+up in the next chapter):
+>>> zip(L1, L2)
+<zip object at 0x026523C8>
+>>> list(zip(L1, L2)) # list() required in 3.X, not 2.X
+[(1, 5), (2, 6), (3, 7), (4, 8)]
+
+
+In Python 2.X only, the related built-in map function pairs items from sequences in a
+similar fashion when passed None for its function argument, but it pads shorter sequences
+with None if the argument lengths differ instead of truncating to the shortest
+length:
+>>> S1 = 'abc'
+>>> S2 = 'xyz123'
+>>> map(None, S1, S2) # 2.X only: pads to len(longest)
+[('a', 'x'), ('b', 'y'), ('c', 'z'), (None, '1'), (None, '2'), (None,'3')]
+
+
+
+>>> keys = ['spam', 'eggs', 'toast']
+>>> vals = [1, 3, 5]
+One solution for turning those lists into a dictionary would be to zip the lists and step
+through them in parallel with a for loop:
+>>> list(zip(keys, vals))
+[('spam', 1), ('eggs', 3), ('toast', 5)]
+>>> D2 = {}
+>>> for (k, v) in zip(keys, vals): D2[k] = v
+...
+>>> D2
+{'eggs': 3, 'toast': 5, 'spam': 1}
+
+
+
+>>> M = map(abs, (-1, 0, 1)) # map returns an iterable, not a list
+>>> M
+<map object at 0x00000000029B75C0>
+>>> next(M) # Use iterator manually: exhausts results
+1 # These do not support len() or indexing
+>>> next(M)
+0
+>>> next(M)
+1
+>>> next(M)
+StopIteration
+
+
+
+_X a single underscore menas the name you should not change
+
+Bound vs Unbound methods
+
+Pseudoprivate Attributes
+
+
+
+res=[1, 2]
+print(res)
+
+for x in res:
+    res.append(x+10)
+    print(res)
+
+
