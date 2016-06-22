@@ -10,4 +10,5 @@ I=C3()
 
 I.meth1(); I.metha()
 print(I.__dict__)
-I.meth2(); I.methb()
+#I.meth2(); I.methb()
+print(list(I.__dict__.keys()))
